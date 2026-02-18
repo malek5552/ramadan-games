@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - جدول ألعاب رمضان</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-logo">
+                <i class="fas fa-moon logo-icon"></i>
+                <span>جدول ألعاب رمضان</span>
+            </a>
+            <div class="navbar-menu">
+                <span class="user-welcome">مرحباً، <%= user.username %></span>
+                <a href="/" class="nav-btn"><i class="fas fa-home"></i> الصفحة الرئيسية</a>
+                <a href="/logout" class="nav-btn logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1><i class="fas fa-gamepad"></i> لوحة التحكم</h1>
+            <button onclick="initDays()" class="init-btn"><i class="fas fa-plus"></i> إنشاء جدول جديد</button>
+        </header>
+
+        <div id="message" class="admin-message" style="display: none;"></div>
+
+        <div class="admin-days-list">
+            <% days.forEach(day => { %>
+                <div class="admin-day-card" id="day-<%= day.dayNumber %>">
+                    <div class="day-view">
+                        <div class="day-info">
+                            <div class="day-badge">اليوم <%= day.dayNumber %></div>
+                            <div class="day-details">
+                                <p><strong>اللعبة:</strong> <%= day.gameName %></p>
+                                <p><strong>الوقت:</strong> <%= day.time %></p>
+                                <p><strong>المستضيف:</strong> <%= day.host %></p>
+                                <% if (day.notes) { %>
+                                    <p><strong>ملاحظات:</strong> <%= day.notes %></p>
+                                <% } %>
+                                <% if (day.isSpecialEvent) { %>
+                                    <span class="special-tag"><i class="fas fa-star"></i> حدث خاص</span>
+                                <% } %>
+                            </div>
+                        </div>
+                        <div class="day-actions">
+                            <button onclick="editDay(<%= day.dayNumber %>)" class="edit-btn"><i class="fas fa-edit"></i> تعديل</button>
+                            <button onclick="deleteDay(<%= day.dayNumber %>)" class="delete-btn"><i class="fas fa-trash"></i> حذف</button>
+                        </div>
+                    </div>
+
+                    <!-- نموذج التعديل (مخفي افتراضياً) -->
+                    <div class="edit-form" id="edit-form-<%= day.dayNumber %>" style="display: none;">
+                        <div class="form-row">
+                            <label><i class="fas fa-gamepad"></i> اسم اللعبة</label>
+                            <input type="text" id="gameName-<%= day.dayNumber %>" value="<%= day.gameName %>" placeholder="مثال: FIFA">
+                        </div>
+                        <div class="form-row">
+                            <label><i class="fas fa-clock"></i> الوقت</label>
+                            <input type="text" id="time-<%= day.dayNumber %>" value="<%= day.time %>" placeholder="مثال: 11:30 PM">
+                        </div>
+                        <div class="form-row">
+                            <label><i class="fas fa-user"></i> المستضيف</label>
+                            <input type="text" id="host-<%= day.dayNumber %>" value="<%= day.host %>" placeholder="مثال: أحمد">
+                        </div>
+                        <div class="form-row">
+                            <label><i class="fas fa-sticky-note"></i> ملاحظات</label>
+                            <textarea id="notes-<%= day.dayNumber %>" rows="3" placeholder="أضف ملاحظات إضافية..."><%= day.notes %></textarea>
+                        </div>
+                        <div class="form-row checkbox-row">
+                            <label>
+                                <input type="checkbox" id="isSpecialEvent-<%= day.dayNumber %>" <%= day.isSpecialEvent ? 'checked' : '' %>>
+                                <i class="fas fa-star"></i> حدث خاص
+                            </label>
+                        </div>
+                        <div class="form-actions">
+                            <button onclick="saveDay(<%= day.dayNumber %>)" class="save-btn"><i class="fas fa-save"></i> حفظ</button>
+                            <button onclick="cancelEdit(<%= day.dayNumber %>)" class="cancel-btn"><i class="fas fa-times"></i> إلغاء</button>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+
+    <script src="/js/admin.js"></script>
+</body>
+</html>

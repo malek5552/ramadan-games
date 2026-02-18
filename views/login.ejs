@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول - جدول ألعاب رمضان</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-icon"><i class="fas fa-moon"></i></div>
+                <h2 id="form-title">تسجيل الدخول</h2>
+                <p>جدول ألعاب رمضان المبارك</p>
+            </div>
+
+            <% if (error) { %>
+                <div class="error-message"><%= error %></div>
+            <% } %>
+
+            <!-- Form تسجيل الدخول -->
+            <form id="loginForm" method="POST" action="/login" class="login-form">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> اسم المستخدم</label>
+                    <input type="text" id="username" name="username" required placeholder="أدخل اسم المستخدم">
+                </div>
+
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> كلمة المرور</label>
+                    <input type="password" id="password" name="password" required placeholder="أدخل كلمة المرور">
+                </div>
+
+                <button type="submit" class="submit-btn">تسجيل الدخول</button>
+            </form>
+
+            <!-- Form التسجيل -->
+            <form id="registerForm" method="POST" action="/register" class="login-form" style="display: none;">
+                <div class="form-group">
+                    <label for="reg-username"><i class="fas fa-user"></i> اسم المستخدم</label>
+                    <input type="text" id="reg-username" name="username" placeholder="أدخل اسم المستخدم">
+                </div>
+
+                <div class="form-group">
+                    <label for="reg-password"><i class="fas fa-lock"></i> كلمة المرور</label>
+                    <input type="password" id="reg-password" name="password" placeholder="أدخل كلمة المرور (6 أحرف على الأقل)">
+                </div>
+
+                <button type="submit" class="submit-btn">إنشاء حساب</button>
+            </form>
+
+            <div class="toggle-mode">
+                <button onclick="toggleForm()" class="toggle-btn" id="toggle-btn">
+                    ليس لديك حساب؟ أنشئ حساباً جديداً
+                </button>
+            </div>
+
+            <div class="admin-note">
+                <p>💡 للحصول على صلاحيات الأدمن، تواصل مع مدير الموقع</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleForm() {
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const formTitle = document.getElementById('form-title');
+            const toggleBtn = document.getElementById('toggle-btn');
+
+            if (loginForm.style.display === 'none') {
+                loginForm.style.display = 'flex';
+                registerForm.style.display = 'none';
+                formTitle.textContent = 'تسجيل الدخول';
+                toggleBtn.textContent = 'ليس لديك حساب؟ أنشئ حساباً جديداً';
+            } else {
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'flex';
+                formTitle.textContent = 'إنشاء حساب جديد';
+                toggleBtn.textContent = 'لديك حساب؟ سجل الدخول';
+            }
+        }
+    </script>
+</body>
+</html>

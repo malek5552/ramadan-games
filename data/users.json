@@ -1,0 +1,16 @@
+[
+  {
+    "id": "1708117234567",
+    "username": "admin",
+    "password": "$2a$10$rQJ5YhZ9kqXZGx8YvN6oNeCW0xH8LZQqF4K.3YKzN2vZ9xJqYqF8G",
+    "role": "admin",
+    "createdAt": "2024-02-16T20:00:00.000Z"
+  },
+  {
+    "id": "1708117234568",
+    "username": "user1",
+    "password": "$2a$10$rQJ5YhZ9kqXZGx8YvN6oNeCW0xH8LZQqF4K.3YKzN2vZ9xJqYqF8G",
+    "role": "user",
+    "createdAt": "2024-02-16T20:00:00.000Z"
+  }
+]

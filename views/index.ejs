@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌙 جدول ألعاب رمضان</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="/" class="navbar-logo">
+                <i class="fas fa-moon logo-icon"></i>
+                <span>جدول ألعاب رمضان</span>
+            </a>
+            <div class="navbar-menu">
+                <% if (user) { %>
+                    <span class="user-welcome">مرحباً، <%= user.username %></span>
+                    <% if (user.role === 'admin') { %>
+                        <a href="/admin" class="nav-btn admin-btn"><i class="fas fa-cog"></i> لوحة التحكم</a>
+                    <% } %>
+                    <a href="/logout" class="nav-btn logout-btn"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a>
+                <% } else { %>
+                    <a href="/login" class="nav-btn login-btn"><i class="fas fa-user"></i> تسجيل الدخول</a>
+                <% } %>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="home-header">
+        <div class="crescent"><i class="fas fa-moon"></i></div>
+        <h1 class="main-title"><i class="fas fa-moon" style="font-size: 0.8em; margin-left: 0.5rem;"></i> جدول ألعاب رمضان المبارك</h1>
+        <p class="subtitle">نظّم ألعابك مع أصدقائك طوال الشهر الفضيل</p>
+    </header>
+
+    <!-- العداد التنازلي -->
+    <% if (days && days.length > 0) { %>
+        <div class="countdown-container" id="countdown">
+            <div class="countdown-header">
+                <i class="fas fa-clock countdown-icon"></i>
+                <h3>موعد اللعبة القادمة</h3>
+            </div>
+            <div class="countdown-game-info">
+                <span class="countdown-game"><%= days[0].gameName %></span>
+                <span class="countdown-host">مع <%= days[0].host %></span>
+            </div>
+            <div class="countdown-timer">
+                <div class="time-unit">
+                    <div class="time-value" id="hours">00</div>
+                    <div class="time-label">ساعة</div>
+                </div>
+                <div class="time-separator">:</div>
+                <div class="time-unit">
+                    <div class="time-value" id="minutes">00</div>
+                    <div class="time-label">دقيقة</div>
+                </div>
+                <div class="time-separator">:</div>
+                <div class="time-unit">
+                    <div class="time-value" id="seconds">00</div>
+                    <div class="time-label">ثانية</div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- جدول الأيام -->
+    <div class="container">
+        <% if (days && days.length > 0) { %>
+            <div class="days-grid">
+                <% days.forEach(day => { %>
+                    <div class="day-card <%= day.isSpecialEvent ? 'special-event' : '' %> <%= day.isConfirmed ? 'confirmed' : '' %>">
+                        <% if (day.isSpecialEvent) { %>
+                            <div class="special-badge"><i class="fas fa-star"></i> حدث خاص</div>
+                        <% } %>
+                        
+                        <div class="day-number">اليوم <%= day.dayNumber %></div>
+                        
+                        <div class="card-content">
+                            <div class="card-row">
+                                <i class="fas fa-gamepad card-icon"></i>
+                                <div>
+                                    <div class="card-label">اللعبة</div>
+                                    <div class="card-value game-name"><%= day.gameName %></div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-row">
+                                <i class="fas fa-clock card-icon"></i>
+                                <div>
+                                    <div class="card-label">الوقت</div>
+                                    <div class="card-value"><%= day.time %></div>
+                                </div>
+                            </div>
+                            
+                            <div class="card-row">
+                                <i class="fas fa-user card-icon"></i>
+                                <div>
+                                    <div class="card-label">المستضيف</div>
+                                    <div class="card-value host-name"><%= day.host %></div>
+                                </div>
+                            </div>
+                            
+                            <% if (day.notes) { %>
+                                <div class="card-row notes-row">
+                                    <i class="fas fa-sticky-note card-icon"></i>
+                                    <div>
+                                        <div class="card-label">ملاحظات</div>
+                                        <div class="card-value notes"><%= day.notes %></div>
+                                    </div>
+                                </div>
+                            <% } %>
+                            
+                            <% if (day.isConfirmed) { %>
+                                <div class="confirmed-badge"><i class="fas fa-check-circle"></i> مؤكد</div>
+                            <% } %>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <div class="votes-display">
+                                <span class="vote-count yes">
+                                    <i class="fas fa-thumbs-up"></i> <%= day.votes.filter(v => v.vote === 'yes').length %>
+                                </span>
+                                <span class="vote-count no">
+                                    <i class="fas fa-thumbs-down"></i> <%= day.votes.filter(v => v.vote === 'no').length %>
+                                </span>
+                            </div>
+                            
+                            <% if (user) { %>
+                                <% 
+                                const hasVoted = day.votes.some(v => v.user === user.username);
+                                %>
+                                <% if (!hasVoted) { %>
+                                    <div class="vote-buttons">
+                                        <button onclick="vote(<%= day.dayNumber %>, 'yes')" class="vote-btn yes-btn">
+                                            <i class="fas fa-thumbs-up"></i> موافق
+                                        </button>
+                                        <button onclick="vote(<%= day.dayNumber %>, 'no')" class="vote-btn no-btn">
+                                            <i class="fas fa-thumbs-down"></i> غير موافق
+                                        </button>
+                                    </div>
+                                <% } else { %>
+                                    <div class="voted-message"><i class="fas fa-check"></i> لقد صوّت</div>
+                                <% } %>
+                            <% } %>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <div class="empty-state">
+                <div class="empty-icon"><i class="fas fa-moon"></i></div>
+                <h3>لا توجد ألعاب مجدولة بعد</h3>
+                <p>سيتم إضافة الجدول قريباً</p>
+            </div>
+        <% } %>
+    </div>
+
+    <script src="/js/main.js"></script>
+</body>
+</html>
